@@ -1,0 +1,22 @@
+{% include 'nav.html'%}
+<br>
+<div class="row mt-2">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 mt-4">
+           <div class="h4 text-center"></div>
+        <div class="card p-4 mt-5">
+            <form action="dispatch_order1" method="post">
+                <input type="hidden" name="customer_order_id" value="{{customer_order_id}}">
+                <div class="form-group">
+                    <label for="deliver_boy_id">Choose DeliverBoy</label>
+                    <select name="deliver_boy_id" id="deliver_boy_id" class="form-control mt-2">
+                        {% for delivery_boy in delivery_boys%}
+                        <option value="{{delivery_boy['_id']}}">{{delivery_boy['name']}}</option>
+                        {% endfor%}
+                    </select>
+                </div>
+                <input type="submit" value="Assign Order" class="btn btn-primary  w-100 mt-3">
+            </form>
+        </div>
+    </div>
+</div>

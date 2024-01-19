@@ -1,0 +1,105 @@
+{% include 'nav.html' %}
+<br>
+<div class="container mt-5">
+    <div class="row">
+        {% for customer_order in customer_orders :%}
+        {% set totalPrice = namespace(value=0) %}
+        {% set customer = get_customer_by_customer_orders(customer_order['customer_id'])%}
+        {% set orders_lists = getOrdered_Items_list_by_customer_order_id(customer_order['_id'])%}
+
+        <div class="col-md-12">
+            <div class="card p-3">
+                <div class="row">
+                     <div class="col-md-3 " style="font-size:14px;">OrderBy : {{customer['name']}}(Customer)</div>
+                    <div class="col-md-4" style="font-size:14px;">Order Date : {{customer_order['date'].strftime("%c")}}</div>
+                  <div class="col-md-3" style="font-size:14px;">Status: {{customer_order['order_status']}}</div>
+                    {% if session['role'] =='admin'%}
+                    {% if customer_order['order_status'] == 'Ordered'%}
+                    <div class="col-md-2" style="font-size:14px;"><a href="dispatch_order?customer_order_id={{customer_order['_id']}}" class="btn btn-primary">
+                        Dispatch Order
+                     </a> </div>
+                    {% endif%}
+                    {% endif%}
+                    {% if session['role'] =='deliveryboy'%}
+                    {% if customer_order['order_status'] == 'Assigned To DeliverBoy'%}
+                    <div class="col-md-2" ><a href="make_as_delivered?customer_order_id={{customer_order['_id']}}" class="btn btn-primary" style="font-size:14px">
+                        Make As Delivered
+                     </a> </div>
+                    {% endif%}
+                    {% endif%}
+                     {% if session['role'] =='customer'%}
+                    {% if customer_order['order_status'] == 'Order Delivered'%}
+                    <div class="col-md-2" ><a href="make_as_received?customer_order_id={{customer_order['_id']}}" class="btn btn-primary" style="font-size:14px">
+                        Make As Received
+                     </a> </div>
+                    {% endif%}
+                    {% endif%}
+                    {% if 'deliver_boy_id' in customer_order%}
+                    {% set deliver_boy = get_delivery_boy_by_customer_order(customer_order['deliver_boy_id'])%}
+                        <div class="col-md-3 mt-1" style="font-size:14px;">DeliveryBoy: {{deliver_boy['name']}}</div>
+                    {% endif%}
+                     {% if 'deliver_date' in customer_order%}
+                      <div class="col-md-4 mt-1" style="font-size:14px;">Delivered Date: {{customer_order['deliver_date'].strftime("%c")}}</div>
+                    {% endif%}
+
+                    <div class="card-body">
+                    <div class="container-fluid">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="font-size:100%;">Product Name</th>
+                            <th style="font-size:100%;">Ordered  Items</th>
+                            <th style="font-size:100%;">Product Price</th>
+                             <th style="font-size:100%;">Total Price</th>
+                             <th style="font-size:100%;">Category</th>
+                              {% if customer_order['order_status']=='cart': %}
+                                <th style="font-size:100%;">Remove Product</th>
+                            {% endif %}
+
+                        </tr>
+                            {% for orders_list in orders_lists%}
+                            {% set products = getProduct_by_orders_list(orders_list['product_id'])%}
+                            {% for product in products:%}
+                            {% set categories  = getCategories(product['category_id'])%}
+                        <tr>
+
+                             <td><img src="/static/Product/{{product['picture']}}" style="max-width:100%;height:50px;"><br>{{product['product_name']}}</td>
+                            <td style="font-size:100%;">{{orders_list['quantity']}}</td>
+                              <td style="font-size:100%;">$ {{product['price']}}</td>
+                             <td style="font-size:100%;">$ {{float(product['price'])*float(orders_list['quantity'])}}</td>
+                              {% set totalPrice.value = totalPrice.value +float(product['price'])*float(orders_list['quantity']) %}
+                            {% for category in categories%}
+                            <td style="font-size:100%;"> {{category['category_name']}}</td>
+                            {% endfor%}
+                              {% if customer_order['order_status']=='cart': %}
+                                <td><a href="removeCart?customer_order_list_id={{orders_list['_id']}}" class="btn btn-danger">Remove</a> </td>
+                            {% endif %}
+                            {% endfor%}
+                            {% endfor%}
+
+
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td><b>$ {{totalPrice.value}}</b></td>
+                        </tr>
+                    </table>
+                </div>
+                    </div>
+                </div>
+                {% if session['role'] =='customer'%}
+                {% if customer_order['order_status'] == 'cart'%}
+                    <div class="col-md-2" style="font-size:14px;"><a href="order_now?customer_order_id={{customer_order['_id']}}&totalPrice={{totalPrice.value}}" class="btn btn-primary">
+                        Order Now
+                     </a> </div>
+                {% endif%}
+                {% endif%}
+
+
+        </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>
+
+
+

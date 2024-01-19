@@ -1,0 +1,81 @@
+{% include 'nav.html'%}
+<br>
+<div class="container">
+    <form action="viewProducts">
+        <div class="row">
+            <div class="col-md-4">
+                <select name="category_id" id="category_id" class="form-control"  onchange="this.form.submit()">
+                    <option value="all">Choose Category</option>
+                     {% for category in  categories: %}
+                    <option value="{{category['_id']}}"
+                            {% if str(category_id) == str(category['_id']) :  %}
+                            selected
+                            {% endif%}
+                    >{{category['category_name']}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="search" name="product_name" id="product_name" placeholder="Search Product" class="form-control" onchange="this.form.submit()"   value ="{{product_name}}" >
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="container">
+    <div class="row">
+        {% for product in products: %}
+        {% set category = get_category_id_by_product(product['category_id'])%}
+         {% set brand = get_brand_id_by_product(product['brand_id'])%}
+            <div class="col-md-4">
+                <div class="card p-2 m-2">
+                    <img src="../static/Product/{{product['picture']}}" style="height:200px; max-width:100%">
+                    <a href="" class="nav-link"> <div class="text-center h4">{{product['product_name']}}</div></a>
+                    <div class="row">
+                        <div class="col-md-6 h6" style="font-size:12px">Available : {{product['available_quantity']}}</div>
+                        <div class="col-md-6 h6" style="font-size:12px">Price : $ {{product['price']}}</div>
+                         <div class="col-md-6 h6" style="font-size:12px">category: {{category['category_name']}}</div>
+                           <div class="col-md-6 h6" style="font-size:12px">Warranty : {{product['warranty']}} Year</div>
+                         <div class="col-md-6 h6" style="font-size:12px">Brand : {{brand['brand_name']}}</div>
+                         <div class="col-md-6 h6" style="font-size:12px">S No : {{product['serial_number']}}</div>
+                        <div class="col-md-12">
+                            <div class="text-center" style="font-size:12px">About</div>
+                            <div class="" style="font-size:14px;overflow:auto;height:25px">{{product['about_item']}}</div>
+                        </div>
+                    </div>
+                      {% if session['role'] =='admin'%}
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form action="editProduct" method="post">
+                                    <input type="hidden" name="product_id" value="{{product['_id']}}">
+                                    <input type="submit" value="Edit Product" class="btn text-white" style="background-color:#000080">
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endif%}
+                      {% if session['role'] =='customer'%}
+                     <form action="addCart" method="post">
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-7">
+                                 <input type="hidden" name="product_id" value="{{product['_id']}}">
+                               <input type="number" class="form-control" name="quantity" placeholder="Quantity" min="1" max="{{product['available_quantity']}}" required>
+                            </div>
+                             <div class="col-md-5">
+                                   <i class="fa fa-shopping-cart" style="font-size:38px;color:red"></i>
+                            </div>
+                            <div class="col-md-6">
+                                   <input type="submit" value="Add To Cart" class="btn btn-danger w-100 mt-2">
+                            </div>
+                        </div>
+                    </div>
+                     </form>
+                    {% endif%}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

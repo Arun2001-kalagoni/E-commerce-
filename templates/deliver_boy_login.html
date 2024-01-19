@@ -1,0 +1,29 @@
+{% include 'nav.html'%}
+<br>
+<style>
+body {
+  background-image: url("static/Images/DeliveryBoy.jpg");
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+  height:200px;
+}
+</style>
+<div class="row mt-2">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 mt-4">
+           <div class="text-center h4" style="color: white;">Delivery Boy Login</div>
+        <div class="card p-4 mt-5">
+            <form action="deliver_boy_login1" method="post">
+                <div class="form-group">
+                    <label for="email" >Email</label>
+                    <input type="text" class="form-control mt-1 p-3" id="email" placeholder="Enter Email" name="email">
+                </div>
+                <div class="form-group mt-2">
+                    <label for="Password">Password</label>
+                    <input type="Password" class="form-control p-3 mt-1" id="Password"  placeholder="Enter Password" name="password">
+                </div>
+                <input type="submit" value="Login" class="btn btn-primary  w-100 mt-3">
+            </form>
+        </div>
+    </div>
+</div>

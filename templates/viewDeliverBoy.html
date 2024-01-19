@@ -1,0 +1,25 @@
+{% include 'nav.html'%}
+<div class="container mt-3">
+  <button class="btn btn-primary" onclick="window.location.href='http://127.0.0.1:5000/addDeliverBoy'">Add a New Delivery Boy</button>
+
+<h4 class="text-center">List of Delivery Boys</h4>
+<table style="width:100%;" class="table table-bordered">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone Number</th>
+    <th>Address</th>
+  </tr>
+  {% for deliver_boy in deliver_boys%}
+  <tr>
+    <td><img src="/static/DeliverBoy/{{deliver_boy['picture']}}" style="max-width:100%;height:50px;"><br> {{deliver_boy['name']}}</td>
+    <td>{{deliver_boy['email']}}</td>
+    <td>{{deliver_boy['phone']}}</td>
+    <td>{{deliver_boy['address']}}</td>
+
+  </tr>
+  {% endfor%}
+
+</table>
+</div>
+

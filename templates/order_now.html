@@ -1,0 +1,34 @@
+{% include 'nav.html'%}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 mt-2">
+            <div class="card p-3 ">
+                <form action="order_now1" method="post">
+                    <input type="hidden" name="customer_order_id" value="{{customer_order_id}}">
+                    <input type="hidden" name="totalPrice" value="{{totalPrice}}">
+                    <div class="row"><div class="col-md-6">Payable  </div><div class="col-md-6 h6">$ {{totalPrice}}</div></div>
+                        <input type="hidden" name="">
+                        <div class="mt-2">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="number" name="cardNumber" id="cardNumber" placeholder="Enter Card Number" class="form-control" required>
+                        </div>
+                        <div class="mt-2">
+                            <label for="nameOnCard">Name on Card</label>
+                            <input type="text" name="nameOnCard" id="nameOnCard" placeholder="Enter Name On Card" class="form-control" required>
+                        </div>
+                        <div class="mt-2">
+                            <label for="nameOnCard">CVV</label>
+                            <input type="text" name="cvv" id="cvv" placeholder="Enter CVV" class="form-control" required>
+                        </div>
+                        <div class="mt-2">
+                            <label for="expireDate">Expire Date</label>
+                            <input type="text" name="expireDate" id="expireDate" placeholder="MM/YY" class="form-control" required>
+                        </div>
+                    <input type="submit" value="Place Order" class="btn btn-primary w-100 mt-1">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
